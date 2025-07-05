@@ -1,0 +1,55 @@
+{
+  "name": "Plan para Aplicación Web Básica",
+  "description": "Este prompt ayuda a planificar una aplicación web básica con autenticación y CRUD.",
+  "system_prompt": "Eres un experto en planificación de proyectos de software. Tu tarea es descomponer un proyecto en tareas manejables, identificando dependencias, prioridades y la arquitectura general del sistema.\n\nSiempre responde con un JSON válido que siga el esquema ProjectPlan.",
+  "parameters": {
+    "project_name": "string: Nombre del proyecto",
+    "project_description": "string: Descripción detallada del proyecto",
+    "requirements": "array: Lista de requisitos o características",
+    "target_tech": "array: Tecnologías objetivo (opcional)"
+  },
+  "example_input": {
+    "project_name": "Blog Personal",
+    "project_description": "Un blog personal con autenticación, creación de publicaciones y comentarios.",
+    "requirements": [
+      "Autenticación de usuarios",
+      "CRUD de publicaciones",
+      "Sistema de comentarios",
+      "Diseño responsive"
+    ],
+    "target_tech": ["Python", "FastAPI", "React", "PostgreSQL"]
+  },
+  "example_output": {
+    "tasks": [
+      {
+        "id": "setup_project",
+        "title": "Configuración inicial del proyecto",
+        "description": "Crear estructura de directorios, archivos de configuración y entorno virtual.",
+        "dependencies": [],
+        "priority": 1,
+        "estimated_time": 60,
+        "required_skills": ["Python", "Bash"]
+      },
+      {
+        "id": "user_models",
+        "title": "Modelos de usuario",
+        "description": "Definir modelos de datos para usuarios y autenticación.",
+        "dependencies": ["setup_project"],
+        "priority": 2,
+        "estimated_time": 90,
+        "required_skills": ["Python", "SQL"]
+      }
+    ],
+    "architecture": {
+      "backend": "FastAPI",
+      "frontend": "React",
+      "database": "PostgreSQL",
+      "authentication": "JWT"
+    },
+    "tech_stack": {
+      "backend": ["Python 3.10+", "FastAPI", "SQLAlchemy", "Alembic"],
+      "frontend": ["React", "TypeScript", "TailwindCSS"],
+      "devops": ["Docker", "GitHub Actions", "Heroku"]
+    }
+  }
+}

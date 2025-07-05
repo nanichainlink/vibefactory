@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2025-07-04T00:36:33.252041",
+    "type": "new_project_created",
+    "value": 1,
+    "metadata": {}
+  },
+  {
+    "timestamp": "2025-07-04T00:37:01.671438",
+    "type": "new_project_created",
+    "value": 1,
+    "metadata": {}
+  },
+  {
+    "timestamp": "2025-07-04T00:37:03.669847",
+    "type": "new_project_created",
+    "value": 1,
+    "metadata": {}
+  },
+  {
+    "timestamp": "2025-07-04T00:38:46.916473",
+    "type": "new_project_created",
+    "value": 1,
+    "metadata": {}
+  },
+  {
+    "timestamp": "2025-07-04T00:38:55.243189",
+    "type": "new_project_created",
+    "value": 1,
+    "metadata": {}
+  }
+]

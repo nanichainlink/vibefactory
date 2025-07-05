@@ -1,0 +1,77 @@
+{
+  "name": "Generador de Modelo FastAPI",
+  "description": "Genera un modelo Pydantic con SQLAlchemy ORM para FastAPI con validaciones y relaciones básicas.",
+  "system_prompt": "Eres un experto desarrollador de Python especializado en FastAPI y SQLAlchemy. Genera código limpio, eficiente y bien documentado siguiendo las mejores prácticas. Incluye docstrings, type hints y validaciones.",
+  "parameters": {
+    "model_name": "string: Nombre del modelo en singular (ej: 'User', 'Product')",
+    "description": "string: Descripción del propósito del modelo",
+    "fields": "array: Lista de campos del modelo con tipo y descripción",
+    "relationships": "array: Relaciones con otros modelos (opcional)",
+    "additional_imports": "array: Importaciones adicionales (opcional)"
+  },
+  "example_input": {
+    "model_name": "Product",
+    "description": "Representa un producto en el catálogo de la tienda",
+    "fields": [
+      {
+        "name": "name",
+        "type": "str",
+        "description": "Nombre del producto",
+        "required": true,
+        "max_length": 100
+      },
+      {
+        "name": "description",
+        "type": "str",
+        "description": "Descripción detallada",
+        "required": false,
+        "max_length": 1000
+      },
+      {
+        "name": "price",
+        "type": "float",
+        "description": "Precio del producto",
+        "required": true,
+        "gt": 0
+      },
+      {
+        "name": "stock_quantity",
+        "type": "int",
+        "description": "Cantidad en inventario",
+        "required": true,
+        "ge": 0
+      },
+      {
+        "name": "is_active",
+        "type": "bool",
+        "description": "Indica si el producto está activo",
+        "default": true
+      }
+    ],
+    "relationships": [
+      {
+        "name": "category",
+        "related_model": "Category",
+        "type": "many-to-one",
+        "back_populates": "products"
+      },
+      {
+        "name": "order_items",
+        "related_model": "OrderItem",
+        "type": "one-to-many",
+        "back_populates": "product"
+      }
+    ]
+  },
+  "example_output": {
+    "file_path": "models/product.py",
+    "content": "from datetime import datetime\nfrom typing import List, Optional\nfrom sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Text\nfrom sqlalchemy.orm import relationship\nfrom sqlalchemy.sql import func\n\nfrom database import Base\n\n\nclass Product(Base):\n    __tablename__ = \"products\"\n    \"\"\"\n    Modelo que representa un producto en el catálogo de la tienda.\n    \n    Atributos:\n        id: Identificador único del producto.\n        name: Nombre del producto.\n        description: Descripción detallada del producto.\n        price: Precio del producto.\n        stock_quantity: Cantidad disponible en inventario.\n        is_active: Indica si el producto está activo y visible.\n        created_at: Fecha de creación del registro.\n        updated_at: Fecha de última actualización.\n        category_id: Referencia a la categoría del producto.\n        category: Relación con el modelo Category.\n        order_items: Relación con los ítems de pedido asociados.\n    \"\"\"\n    \n    id = Column(Integer, primary_key=True, index=True)\n    name = Column(String(100), nullable=False, index=True)\n    description = Column(Text, nullable=True)\n    price = Column(Float, nullable=False)\n    stock_quantity = Column(Integer, nullable=False, default=0)\n    is_active = Column(Boolean, default=True)\n    created_at = Column(\n        DateTime(timezone=True),\n        server_default=func.now(),\n        nullable=False\n    )\n    updated_at = Column(\n        DateTime(timezone=True),\n        server_default=func.now(),\n        onupdate=func.now(),\n        nullable=False\n    )\n    category_id = Column(\n        Integer, \n        ForeignKey(\"categories.id\", ondelete=\"SET NULL\"),\n        nullable=True\n    )\n    \n    # Relaciones\n    category = relationship(\"Category\", back_populates=\"products\")\n    order_items = relationship(\"OrderItem\", back_populates=\"product\")\n    \n    def __repr__(self) -> str:\n        return f\"<Product {self.name} (ID: {self.id})>\"\n\n\n# Esquema Pydantic para validación\nfrom pydantic import BaseModel, Field, validator\nfrom typing import Optional\nfrom datetime import datetime\n\n\nclass ProductBase(BaseModel):\n    name: str = Field(..., max_length=100, description=\"Nombre del producto\")\n    description: Optional[str] = Field(\n        None, \n        max_length=1000, \n        description=\"Descripción detallada del producto\"\n    )\n    price: float = Field(..., gt=0, description=\"Precio del producto\")\n    stock_quantity: int = Field(\n        ..., \n        ge=0, \n        description=\"Cantidad disponible en inventario\"\n    )\n    is_active: bool = Field(True, description=\"Indica si el producto está activo\")\n    category_id: Optional[int] = Field(\n        None, \n        description=\"ID de la categoría del producto\"\n    )\n\n    @validator('name')\n    def name_must_not_be_empty(cls, v):\n        if not v.strip():\n            raise ValueError('El nombre no puede estar vacío')\n        return v.strip()\n\n\nclass ProductCreate(ProductBase):\n    pass\n\n\nclass ProductUpdate(ProductBase):\n    name: Optional[str] = Field(None, max_length=100, description=\"Nombre del producto\")\n    description: Optional[str] = Field(\n        None, \n        max_length=1000, \n        description=\"Descripción detallada del producto\"\n    )\n    price: Optional[float] = Field(None, gt=0, description=\"Precio del producto\")\n    stock_quantity: Optional[int] = Field(\n        None, \n        ge=0, \n        description=\"Cantidad disponible en inventario\"\n    )\n    is_active: Optional[bool] = Field(\n        None, \n        description=\"Indica si el producto está activo\"\n    )\n\n\nclass ProductInDBBase(ProductBase):\n    id: int\n    created_at: datetime\n    updated_at: datetime\n    \n    class Config:\n        orm_mode = True\n\n\nclass Product(ProductInDBBase):\n    pass\n\n\nclass ProductInDB(ProductInDBBase):\n    pass",
+    "language": "python",
+    "dependencies": [
+      "sqlalchemy",
+      "pydantic",
+      "python-dotenv"
+    ],
+    "documentation": "Este módulo define el modelo de Producto para la base de datos y los esquemas Pydantic para validación de datos. Incluye relaciones con Categoría y OrderItem."
+  }
+}

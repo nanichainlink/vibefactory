@@ -1,0 +1,92 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+        args: ['--maxkb=1024']  # Increased for map data
+    -   id: debug-statements
+    -   id: requirements-txt-fixer
+    -   id: check-ast  # Check that files parse as valid Python
+    -   id: check-merge-conflict  # Check for merge conflict strings
+
+-   repo: https://github.com/psf/black
+    rev: 23.11.0
+    hooks:
+    -   id: black
+        language_version: python3.12  # Updated to match our Python version
+        types_or: [python, pyi]
+        args: [--line-length=88, --target-version=py312]
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+    -   id: isort
+        name: isort (python)
+        args: [--profile=black, --filter-files, --line-length=88]
+        types: [python]
+
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: 
+          - flake8-bugbear==23.11.29
+          - flake8-docstrings>=1.7.0
+          - darglint>=1.8.1  # For docstring validation
+        args: [
+            --max-line-length=88, 
+            --ignore=E203, W503,  # Ignore line break before binary operator
+            --max-complexity=15,  # Slightly more strict complexity
+            --docstring-convention=google  # Enforce Google style docstrings
+        ]
+        exclude: ^tests/  # Exclude test files from some flake8 rules
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.0
+    hooks:
+    -   id: mypy
+        additional_dependencies: 
+          - types-requests
+          - types-python-dateutil
+          - types-pyyaml
+          - types-Flask  # For web components
+        args: [
+            --ignore-missing-imports,
+            --disallow-untyped-defs,
+            --disallow-incomplete-defs,
+            --check-untyped-defs,
+            --no-implicit-optional,
+            --warn-redundant-casts,
+            --warn-unused-ignores,
+            --warn-return-any,
+            --warn-unreachable
+        ]
+        files: ^(?!tests/).*\.py$  # Check all Python files except tests
+
+# Additional linters for better code quality
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.4
+    hooks:
+    -   id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+
+# Check for secrets in code
+-   repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+    -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: tests/.*
+
+# Check for broken symlinks
+-   repo: https://github.com/cookiecutter/cookiecutter
+    rev: '2.2.3'  # Use the latest version
+    hooks:
+    -   id: check-valid-filenames
+        args: [--check-filenames-in=.git]
+        exclude: 
+          - '*.json'  # Exclude JSON files from filename checks
+          - '*.md'    # Exclude markdown files

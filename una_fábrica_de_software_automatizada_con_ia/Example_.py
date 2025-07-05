@@ -1,0 +1,1 @@
+automate('delete_file')

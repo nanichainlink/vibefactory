@@ -1,0 +1,172 @@
+{
+  "name": "Plan para E-commerce Básico",
+  "description": "Plan detallado para un sitio de comercio electrónico con carrito de compras y procesamiento de pagos.",
+  "system_prompt": "Eres un arquitecto de software experimentado especializado en comercio electrónico. Descompón el proyecto en tareas técnicas detalladas, considerando seguridad, escalabilidad y experiencia del usuario.\n\nSiempre responde con un JSON válido que siga el esquema ProjectPlan.",
+  "parameters": {
+    "project_name": "string: Nombre del sitio de comercio electrónico",
+    "project_description": "string: Descripción detallada del negocio y requisitos",
+    "target_audience": "string: Descripción de los usuarios objetivo",
+    "key_features": "array: Características principales requeridas",
+    "payment_processors": "array: Procesadores de pago a integrar"
+  },
+  "example_input": {
+    "project_name": "Tienda de Ropa Eco",
+    "project_description": "Una tienda en línea de ropa ecológica y sostenible con catálogo, carrito de compras y sistema de reseñas.",
+    "target_audience": "Personas de 18-45 años interesadas en moda sostenible y comercio justo.",
+    "key_features": [
+      "Catálogo de productos con filtros",
+      "Sistema de autenticación de usuarios",
+      "Carrito de compras",
+      "Procesamiento de pagos",
+      "Sistema de reseñas",
+      "Panel de administración",
+      "Integración con redes sociales"
+    ],
+    "payment_processors": ["Stripe", "PayPal"]
+  },
+  "example_output": {
+    "tasks": [
+      {
+        "id": "project_setup",
+        "title": "Configuración inicial del proyecto",
+        "description": "Crear estructura de directorios, configurar entorno de desarrollo e instalar dependencias iniciales.",
+        "dependencies": [],
+        "priority": 1,
+        "estimated_time": 120,
+        "required_skills": ["Python", "Node.js", "Docker"]
+      },
+      {
+        "id": "product_models",
+        "title": "Modelos de datos para productos",
+        "description": "Diseñar e implementar modelos para productos, categorías, inventario y variantes.",
+        "dependencies": ["project_setup"],
+        "priority": 2,
+        "estimated_time": 180,
+        "required_skills": ["Python", "SQL", "SQLAlchemy"]
+      },
+      {
+        "id": "user_authentication",
+        "title": "Sistema de autenticación",
+        "description": "Implementar registro, inicio de sesión, recuperación de contraseña y verificación de correo electrónico.",
+        "dependencies": ["project_setup"],
+        "priority": 2,
+        "estimated_time": 240,
+        "required_skills": ["Python", "JWT", "OAuth2"]
+      },
+      {
+        "id": "product_catalog",
+        "title": "Catálogo de productos",
+        "description": "Desarrollar vistas para mostrar productos, filtros, búsqueda y paginación.",
+        "dependencies": ["product_models"],
+        "priority": 3,
+        "estimated_time": 300,
+        "required_skills": ["React", "TypeScript", "REST APIs"]
+      },
+      {
+        "id": "shopping_cart",
+        "title": "Carrito de compras",
+        "description": "Implementar funcionalidad de carrito con persistencia en base de datos y sesiones.",
+        "dependencies": ["user_authentication", "product_models"],
+        "priority": 3,
+        "estimated_time": 240,
+        "required_skills": ["Python", "React", "Redux"]
+      },
+      {
+        "id": "payment_processing",
+        "title": "Procesamiento de pagos",
+        "description": "Integrar Stripe y PayPal para procesamiento seguro de pagos.",
+        "dependencies": ["shopping_cart"],
+        "priority": 4,
+        "estimated_time": 360,
+        "required_skills": ["Stripe API", "PayPal API", "Seguridad"]
+      },
+      {
+        "id": "admin_dashboard",
+        "title": "Panel de administración",
+        "description": "Crear interfaz para gestión de productos, pedidos y usuarios.",
+        "dependencies": ["product_models", "user_authentication"],
+        "priority": 3,
+        "estimated_time": 300,
+        "required_skills": ["React", "TypeScript", "Admin UI"]
+      },
+      {
+        "id": "product_reviews",
+        "title": "Sistema de reseñas",
+        "description": "Implementar funcionalidad para que los usuarios dejen reseñas y calificaciones.",
+        "dependencies": ["user_authentication", "product_catalog"],
+        "priority": 4,
+        "estimated_time": 180,
+        "required_skills": ["Python", "React", "REST APIs"]
+      },
+      {
+        "id": "social_integration",
+        "title": "Integración con redes sociales",
+        "description": "Agregar inicio de sesión social y compartir productos en redes sociales.",
+        "dependencies": ["user_authentication"],
+        "priority": 5,
+        "estimated_time": 240,
+        "required_skills": ["OAuth", "Social Media APIs"]
+      },
+      {
+        "id": "testing",
+        "title": "Pruebas automatizadas",
+        "description": "Implementar pruebas unitarias, de integración y de extremo a extremo.",
+        "dependencies": ["product_catalog", "shopping_cart", "payment_processing"],
+        "priority": 6,
+        "estimated_time": 480,
+        "required_skills": ["pytest", "Jest", "Cypress"]
+      },
+      {
+        "id": "deployment",
+        "title": "Despliegue y CI/CD",
+        "description": "Configurar despliegue automático y pipeline de CI/CD.",
+        "dependencies": ["testing"],
+        "priority": 7,
+        "estimated_time": 360,
+        "required_skills": ["Docker", "GitHub Actions", "AWS/GCP"]
+      }
+    ],
+    "architecture": {
+      "frontend": {
+        "framework": "React 18",
+        "state_management": "Redux Toolkit",
+        "styling": "TailwindCSS + CSS Modules",
+        "routing": "React Router v6"
+      },
+      "backend": {
+        "framework": "FastAPI",
+        "database": "PostgreSQL con SQLAlchemy ORM",
+        "authentication": "JWT + OAuth2",
+        "caching": "Redis"
+      },
+      "infrastructure": {
+        "containerization": "Docker + Docker Compose",
+        "ci_cd": "GitHub Actions",
+        "monitoring": "Prometheus + Grafana",
+        "logging": "ELK Stack"
+      }
+    },
+    "tech_stack": {
+      "core": ["Python 3.10+", "Node.js 18+", "TypeScript 5+"],
+      "frontend": ["React", "Redux Toolkit", "React Query", "Vite"],
+      "backend": ["FastAPI", "SQLAlchemy", "Alembic", "Pydantic"],
+      "database": ["PostgreSQL", "Redis"],
+      "devops": ["Docker", "GitHub Actions", "Terraform"],
+      "testing": ["pytest", "Jest", "Cypress", "Playwright"]
+    },
+    "security_considerations": [
+      "Protección contra CSRF y XSS",
+      "Validación de entrada del usuario",
+      "Protección de rutas autenticadas",
+      "Encriptación de datos sensibles",
+      "Cumplimiento de PCI DSS para pagos"
+    ],
+    "scalability_considerations": [
+      "Arquitectura de microservicios",
+      "Caché distribuido",
+      "Balanceo de carga",
+      "CDN para activos estáticos",
+      "Escalado automático"
+    ]
+  }
+}
